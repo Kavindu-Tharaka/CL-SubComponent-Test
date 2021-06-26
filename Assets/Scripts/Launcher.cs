@@ -15,6 +15,20 @@ namespace Com.Cdap.CLSubComponent
         [SerializeField]
         private byte maxPlayersPerRoom = 4;
 
+        /// <summary>
+        /// The Ui Panel to let the user enter name, connect and play
+        /// </summary>
+        [Tooltip("The Ui Panel to let the user enter name, connect and play")]
+        [SerializeField]
+        private GameObject controlPanel;
+
+        /// <summary>
+        /// The UI Label to inform the user that the connection is in progress
+        /// </summary>
+        [Tooltip("The UI Label to inform the user that the connection is in progress")]
+        [SerializeField]
+        private GameObject progressLabel;
+
         #endregion
 
 
@@ -50,7 +64,8 @@ namespace Com.Cdap.CLSubComponent
         /// </summary>
         void Start()
         {
-            Connect();
+            progressLabel.SetActive(false);
+            controlPanel.SetActive(true);
         }
 
 
@@ -67,6 +82,9 @@ namespace Com.Cdap.CLSubComponent
         /// </summary>
         public void Connect()
         {
+            progressLabel.SetActive(true);
+            controlPanel.SetActive(false);
+
             // we check if we are connected or not, we join if we are , else we initiate the connection to the server.
             if (PhotonNetwork.IsConnected)
             {
@@ -93,6 +111,9 @@ namespace Com.Cdap.CLSubComponent
         /// </summary>
         public override void OnConnectedToMaster()
         {
+            progressLabel.SetActive(false);
+            controlPanel.SetActive(true);
+
             Debug.Log("PUN Basics Tutorial/Launcher: OnConnectedToMaster() was called by PUN");
 
             // The first we try to do is to join a potential existing room. 
