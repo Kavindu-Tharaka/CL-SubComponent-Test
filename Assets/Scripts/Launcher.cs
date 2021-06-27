@@ -165,7 +165,7 @@ namespace Com.Cdap.CLSubComponent
         /// </summary>
         public override void OnJoinedRoom()
         {
-            Debug.Log("Launcher: OnJoinedRoom() called by PUN. Now this client is in a room.");
+            Debug.Log("Launcher: OnJoinedRoom() called by PUN. Now this client is in a room. Is this client the Master Cient: " + PhotonNetwork.IsMasterClient);
 
             // We only load if we are the first player, else we rely on `PhotonNetwork.AutomaticallySyncScene` to sync our instance scene.
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
