@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Photon.Pun;
 
 
 namespace Com.Cdap.CLSubComponent
 {
-    public class PlayerAnimatorManager : MonoBehaviour
+    public class PlayerAnimatorManager : MonoBehaviourPun
     {
 
         #region Private Serializable Fields
@@ -41,6 +42,11 @@ namespace Com.Cdap.CLSubComponent
 
         void Update()
         {
+            if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
+            {
+                return;
+            }
+
             if (!animator)
             {
                 return;

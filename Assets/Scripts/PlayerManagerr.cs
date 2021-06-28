@@ -9,7 +9,7 @@ namespace Com.Cdap.CLSubComponent
     /// Player manager.
     /// Handles fire Input and Beams.
     /// </summary>
-    public class PlayerManagerr : MonoBehaviourPunCallbacks
+    public class PlayerManagerr : MonoBehaviourPunCallbacks, IPunObservable
     {
         #region Private Fields
 
@@ -26,6 +26,27 @@ namespace Com.Cdap.CLSubComponent
         public float Health = 1f;
         #endregion
 
+        #region IPunObservable implementation
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting)  //  someqhat equal to 'photonView.IsMine == true'
+            {
+                // We own this player: send the others our data
+                stream.SendNext(IsFiring);
+                stream.SendNext(Health);
+            }
+            else
+            {
+                // Network player, receive data
+                this.IsFiring = (bool)stream.ReceiveNext();
+                this.Health = (float)stream.ReceiveNext();
+            }
+        }
+
+
+        #endregion
+
         #region MonoBehaviour CallBacks
 
         /// <summary>
@@ -40,6 +61,27 @@ namespace Com.Cdap.CLSubComponent
             else
             {
                 beams.SetActive(false);
+            }
+        }
+
+        /// <summary>
+        /// MonoBehaviour method called on GameObject by Unity during initialization phase.
+        /// </summary>
+        void Start()
+        {
+            CameraWorkk _cameraWork = this.gameObject.GetComponent<CameraWorkk>();
+
+
+            if (_cameraWork != null)
+            {
+                if (photonView.IsMine)
+                {
+                    _cameraWork.OnStartFollowing();
+                }
+            }
+            else
+            {
+                Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
             }
         }
 
