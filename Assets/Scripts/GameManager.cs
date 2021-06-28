@@ -11,6 +11,19 @@ namespace Com.Cdap.CLSubComponent
     public class GameManager : MonoBehaviourPunCallbacks
     {
 
+        #region Photon Fields
+        public static GameManager Instance;
+
+        #endregion
+
+
+        #region MonoBehaviour CallBacks
+        void Start()
+        {
+            Instance = this;
+        }
+
+        #endregion
 
         #region Photon Callbacks
 
